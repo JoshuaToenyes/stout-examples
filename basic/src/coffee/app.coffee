@@ -1,6 +1,14 @@
-console.log 'inside my app!'
+App = require '/Users/josh/work/stout/dist/client/App'
 
-thisIsAVeryLongVariableName = 55
-thisIsAVeryLongVariableName2 = 55
+app = new App
 
-window.XYZ = thisIsAVeryLongVariableName + thisIsAVeryLongVariableName2
+app.routes =
+  '/': ->
+    console.log 'hello!'
+    document.write 'hello'
+
+  '/bye': ->
+    console.log 'bye!'
+    document.write 'bye'
+
+app.start()

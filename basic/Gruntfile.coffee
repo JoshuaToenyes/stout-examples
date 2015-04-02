@@ -1,5 +1,6 @@
 minifyify = require 'minifyify'
 fs = require 'fs'
+modRewrite = require('connect-modrewrite');
 
 
 module.exports = (grunt) ->
@@ -34,21 +35,6 @@ module.exports = (grunt) ->
 
 
     coffee:
-      options:
-        sourceMap: true
-      app:
-        expand: true
-        flatten: false
-        cwd: 'src/coffee'
-        src: ['./**/*.coffee']
-        dest: 'tmp/js'
-        ext: '.js'
-
-
-    coffeeredux:
-      options:
-        bare: false
-        sourceMap: true
       app:
         expand: true
         flatten: false
@@ -59,25 +45,14 @@ module.exports = (grunt) ->
 
 
     browserify:
-      options:
-        #transform: ['coffeeify']
-        browserifyOptions:
-          debug: true
       app:
         files:
           'dist/js/app.js': ['tmp/js/**/*.js']
-        # options:
-        #   preBundleCB: (bundler) ->
-        #     bundler.plugin('minifyify', {map: 'bundle.map'})
-        #     bundler.bundle (err, src, map) ->
-        #       fs = require 'fs'
-        #       fs.writeFile 'dist/js/app2.js', src
-        #       fs.writeFile 'dist/js/bundle.map', map
 
 
     watch:
       compile:
-        files: ['src/**/*.coffee', 'test/**/*.coffee']
+        files: ['src/**/*.coffee']
         tasks: ['compile']
         configFiles:
           files: ['Gruntfile.coffee']
@@ -85,22 +60,18 @@ module.exports = (grunt) ->
             reload: true
 
 
-    copy:
-      maps:
-        files: [
-          {expand: true, flatten: true, src: ['tmp/js/**/*.map'], dest: 'dist/js'}
-          {expand: true, src: ['src/coffee/**/*'], dest: 'dist/'}
-        ]
-
-
     connect:
       server:
         options:
           port: 8000
           base: 'dist'
+          middleware: (connect, options, middlewares) ->
+            middlewares.unshift(modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']))
+            return middlewares
 
 
     clean:
+      tmp: ['tmp']
       all: [
         'dist'
         'tmp'
@@ -108,56 +79,12 @@ module.exports = (grunt) ->
         'src/**/*.map'
       ]
 
-    minifyify:
-      app:
-        src: 'tmp/js/app.js'
-        dest: 'dist/js/app.js'
-        map: 'tmp/js/app.jsmap.json'
 
+    open:
+      test:
+        path: 'http://localhost:8000/'
+        app: 'Safari'
 
-
-  grunt.registerMultiTask 'minifyify', '', ->
-
-    browserify = require 'browserify'
-    bundler = new browserify({debug: true})
-    mkdirp = require 'mkdirp'
-    #
-    # namespace = this.name + '.' + this.target
-    #
-    # # Fetch configuration data
-    # this.requiresConfig namespace + '.src', namespace + '.dest', namespace + '.map'
-    #
-    # src  = grunt.config namespace + '.src'
-    # dest = grunt.config namespace + '.dest'
-    # map  = grunt.config namespace + '.map'
-    #
-    # options = grunt.config 'options'
-    #
-    # # Run minifyify
-    done = this.async()
-    #
-    # readStream  = fs.createReadStream src
-    # writeStream = fs.createWriteStream dest
-
-    bundler.add './tmp/js/app.js'
-
-    bundler.plugin('minifyify', {map: 'bundle.map'})
-    bundler.bundle (err, src, map) ->
-      fs = require 'fs'
-      mkdirp.sync 'dist/js'
-      fs.writeFileSync 'dist/js/app.js', src
-      fs.writeFileSync 'dist/js/bundle.map', map
-
-      #
-      # readStream.on 'open', ->
-      #   readStream.pipe(minifyify(options)).pipe(writeStream)
-      #
-      # readStream.on 'error', (error) ->
-      #   grunt.log.writeln error
-      #   done false
-      #
-      # writeStream.on 'finish', ->
-      done()
 
   grunt.initConfig(config)
   grunt.loadNpmTasks 'grunt-coffeelint'
@@ -170,20 +97,19 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-copy'
-  grunt.loadNpmTasks 'grunt-mocha-test'
+  grunt.loadNpmTasks 'grunt-open'
 
   grunt.registerTask 'compile', [
     'coffeelint'
     'clean'
     'coffee'
-    #'coffeeredux'
     'browserify'
-    #'minifyify'
-    'copy'
     'jade'
+    'clean:tmp'
     ]
 
   grunt.registerTask 'run', [
     'compile'
+    'open'
     'connect:server:keepalive'
   ]
