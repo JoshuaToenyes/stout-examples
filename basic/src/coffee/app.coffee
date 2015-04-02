@@ -11,4 +11,7 @@ app.routes =
     console.log 'bye!'
     document.write 'bye'
 
+  '/name/:name': (name) ->
+    document.write name
+
 app.start()
