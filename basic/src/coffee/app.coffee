@@ -1,15 +1,39 @@
-App = require '/Users/josh/work/stout/dist/client/App'
+Controller = require '/Users/josh/work/stout/dist/common/controller/Controller'
+ClientApp  = require '/Users/josh/work/stout/dist/client/app/ClientApp'
+#View = require '/Users/josh/work/stout/dist/'
 
-app = new App
+
+helloTmpl = require './templates/hello'
+goodbyeTmpl = require './templates/goodbye'
+
+
+
+class HelloController extends Controller
+
+  constructor: ->
+    super arguments...
+
+
+class GoodbyeController extends Controller
+
+  constructor: ->
+    super arguments...
+
+
+
+app = new ClientApp
+
+helloController = new HelloController app
+goodbyeController = new GoodbyeController app
+
+
 
 app.routes =
   '/': ->
-    console.log 'hello!'
-    document.write 'hello'
+    document.write helloTmpl()
 
   '/bye': ->
-    console.log 'bye!'
-    document.write 'bye'
+    document.write goodbyeTmpl()
 
   '/name/:name': (name) ->
     document.write name

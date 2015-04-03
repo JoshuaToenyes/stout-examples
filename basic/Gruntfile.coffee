@@ -20,12 +20,12 @@ module.exports = (grunt) ->
             author: '<%= pkg.author %>'
         files:
           'dist': ['src/jade/index.jade']
-      partials:
+      templates:
         options:
           client: true
           wrap: 'node'
         files:
-          'tmp/js/templates': ['src/jade/partials/**/*.jade']
+          'tmp/js/templates': ['src/jade/templates/**/*.jade']
 
 
     coffeelint:
@@ -103,8 +103,8 @@ module.exports = (grunt) ->
     'coffeelint'
     'clean'
     'coffee'
-    'browserify'
     'jade'
+    'browserify'
     'clean:tmp'
     ]
 
