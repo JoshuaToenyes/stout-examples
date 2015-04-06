@@ -1,8 +1,8 @@
+window.jQuery = window.$ = require './../../lib/jquery-2.1.3.min.js'
+
 Controller = require '/Users/josh/work/stout/dist/common/controller/Controller'
 ClientApp  = require '/Users/josh/work/stout/dist/client/app/ClientApp'
 ClientView = require '/Users/josh/work/stout/dist/client/view/ClientView'
-#View = require '/Users/josh/work/stout/dist/'
-
 
 helloTmpl = require './templates/hello'
 goodbyeTmpl = require './templates/goodbye'
@@ -24,6 +24,8 @@ class HelloController extends Controller
   constructor: ->
     super arguments...
     @_view = new HelloView()
+    @_view.on 'click:anchor', (e) =>
+      @messageBus.publish 'nav:goto', e.data
   show: ->
     @_view.render()
 
@@ -32,6 +34,8 @@ class GoodbyeController extends Controller
   constructor: ->
     super arguments...
     @_view = new GoodbyeView()
+    @_view.on 'click:anchor', (e) =>
+      @messageBus.publish 'nav:goto', e.data
   show: ->
     @_view.render()
 
