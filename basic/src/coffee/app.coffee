@@ -10,13 +10,13 @@ goodbyeTmpl = require './templates/goodbye'
 
 class HelloView extends ClientView
   constructor: ->
-    super null, helloTmpl
+    super helloTmpl
     @el = document.body
 
 
 class GoodbyeView extends ClientView
   constructor: ->
-    super null, goodbyeTmpl
+    super goodbyeTmpl
     @el = document.body
 
 
