@@ -1,5 +1,3 @@
-window.jQuery = window.$ = require './../../lib/jquery-2.1.3.min.js'
-
 Controller = require '/Users/josh/work/stout/dist/common/controller/Controller'
 ClientApp  = require '/Users/josh/work/stout/dist/client/app/ClientApp'
 ClientView = require '/Users/josh/work/stout/dist/client/view/ClientView'
