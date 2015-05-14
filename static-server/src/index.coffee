@@ -1,15 +1,10 @@
-zlib = require 'zlib'
+HTTPServerApp    = require '/Users/josh/work/stout/server/app/HTTPServerApp'
 
-HTTPCompress     = require '/Users/josh/work/stout/server/server/http/Compress'
-HTTPServer       = require '/Users/josh/work/stout/server/server/http/HTTPServer'
-StaticController = require '/Users/josh/work/stout/server/server/http/StaticController'
+app = new HTTPServerApp
 
-s = new HTTPServer
-s.port = 8011
+app.server.port = 8011
 
-s._post new HTTPCompress
+app.server.routes =
+  '/*splat': app.static('static')
 
-s.routes =
-  '/*splat': new StaticController 'static'
-
-s.start()
+app.server.start()
