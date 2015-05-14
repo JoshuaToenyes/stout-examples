@@ -1,0 +1,19 @@
+{
+  "name": "stout-examples-static-server",
+  "description": "Basic Stout Framework usage to create a simple static server.",
+  "author": "Joshua Toenyes <josh@goatriot.com>",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "lodash": "2.4.x",
+    "stout": "*"
+  },
+  "devDependencies": {
+    "grunt": "0.4.x",
+    "grunt-coffeelint": "0.0.13",
+    "grunt-contrib-coffee": "0.13.x",
+    "grunt-contrib-clean": "0.6.x",
+    "grunt-contrib-watch": "0.6.x",
+    "grunt-execute": "0.2.x"
+  }
+}
